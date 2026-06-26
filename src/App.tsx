@@ -7,10 +7,10 @@ import {
   defaultMainTitleLogo,
   defaultSponsorRow3,
   defaultSponsorRow4,
+  defaultDeityLeft,
+  defaultDeityRight,
   type LoadedPosterAssets,
 } from './assets'
-import chamundaFallback from './assets/deities/chamunda-maa.svg'
-import koylaveerFallback from './assets/deities/koylaveer-dada.svg'
 import { INVITATION_HEIGHT, INVITATION_WIDTH } from './config/tournament'
 import { Navbar } from './components/layout/Navbar'
 import { Hero } from './components/layout/Hero'
@@ -34,8 +34,8 @@ const defaultAssets: LoadedPosterAssets = {
   sponsorRow3: [...defaultSponsorRow3],
   sponsorRow4: [...defaultSponsorRow4],
   season3LogoUrl: rpclSeason3Logo,
-  deityLeftUrl: chamundaFallback,
-  deityRightUrl: koylaveerFallback,
+  deityLeftUrl: defaultDeityLeft,
+  deityRightUrl: defaultDeityRight,
 }
 
 const LG_BREAKPOINT = 1024

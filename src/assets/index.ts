@@ -20,8 +20,10 @@ import {
   sponsorRow4,
 } from '../config/sponsors'
 import { deityConfig } from '../config/deities'
-import chamundaFallback from './deities/chamunda-maa.svg'
-import koylaveerFallback from './deities/koylaveer-dada.svg'
+import chamundaMaa from './deities/chamunda-maa.jpg'
+import koylaveerDada from './deities/koylaveer-dada.png'
+
+export { chamundaMaa as defaultDeityLeft, koylaveerDada as defaultDeityRight }
 
 export { rpclSeason3Logo }
 
@@ -86,8 +88,8 @@ export async function loadDeityImages(): Promise<{ left: string; right: string }
     tryLoadImage(deityConfig.right.publicPath),
   ])
   return {
-    left: left ?? chamundaFallback,
-    right: right ?? koylaveerFallback,
+    left: left ?? chamundaMaa,
+    right: right ?? koylaveerDada,
   }
 }
 

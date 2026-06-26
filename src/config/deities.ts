@@ -2,7 +2,7 @@
 export const deityConfig = {
   left: {
     id: 'chamunda-maa',
-    publicPath: '/deities/chamunda-maa.png',
+    publicPath: '/deities/chamunda-maa.jpg',
     labelGujarati: 'જય ચામુંડા માં',
   },
   right: {

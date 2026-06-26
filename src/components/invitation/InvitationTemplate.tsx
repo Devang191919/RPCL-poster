@@ -20,8 +20,8 @@ import {
   defaultSponsorRow4,
   rpclSeason3Logo,
 } from '../../assets'
-import chamundaFallback from '../../assets/deities/chamunda-maa.svg'
-import koylaveerFallback from '../../assets/deities/koylaveer-dada.svg'
+import chamundaMaa from '../../assets/deities/chamunda-maa.jpg'
+import koylaveerDada from '../../assets/deities/koylaveer-dada.png'
 import { CenterCricketDecor } from './CricketDecorations'
 
 type InvitationTemplateProps = {
@@ -41,13 +41,14 @@ const TEAM_COL_W = 228
 const PHOTO_MAX = 272
 const PHOTO_INNER = PHOTO_MAX - 16
 const TEAM_LOGO_SIZE = TEAM_COL_W - 10
-const TEAM_LOGO_IMG = TEAM_LOGO_SIZE - 28
+const TEAM_LOGO_IMG = TEAM_LOGO_SIZE - 10
 
 const GOLD = '#f5c518'
 const GOLD_LIGHT = '#ffe566'
 const GOLD_DARK = '#c9a012'
 const CONTENT_PAD = POSTER_FRAME_INNER_INSET + 5
-const DEITY_IMG = 96
+const DEITY_IMG = 108
+const DEITY_IMG_RIGHT_W = 152
 
 const sponsorLogoWrapStyle: CSSProperties = {
   background: 'transparent',
@@ -110,29 +111,47 @@ function PosterInnerFrame() {
   )
 }
 
-function DeityCorner({ imageUrl, label }: { imageUrl: string; label: string }) {
+function DeityCorner({
+  imageUrl,
+  label,
+  objectPosition = 'center center',
+  width = DEITY_IMG,
+  height = DEITY_IMG + 8,
+}: {
+  imageUrl: string
+  label: string
+  objectPosition?: string
+  width?: number
+  height?: number
+}) {
   return (
     <div
       className="flex shrink-0 flex-col items-center"
-      style={{ width: DEITY_IMG + 16, marginTop: 2 }}
+      style={{ width: width + 4, marginTop: 2 }}
     >
       <div
         className="overflow-hidden rounded-lg"
         style={{
-          width: DEITY_IMG,
-          height: DEITY_IMG,
+          width,
+          height,
           border: `2px solid ${GOLD}`,
           boxShadow: `0 0 16px ${GOLD}66, inset 0 0 12px rgba(255,255,255,0.08)`,
-          background: 'linear-gradient(145deg, rgba(255,255,255,0.12), rgba(60,20,100,0.5))',
+          background: '#1a0533',
         }}
       >
         <img
           src={imageUrl}
           alt={label}
           crossOrigin="anonymous"
-          width={DEITY_IMG}
-          height={DEITY_IMG}
-          style={{ width: DEITY_IMG, height: DEITY_IMG, objectFit: 'cover', display: 'block' }}
+          width={width}
+          height={height}
+          style={{
+            width,
+            height,
+            objectFit: 'cover',
+            objectPosition,
+            display: 'block',
+          }}
         />
       </div>
       <p
@@ -296,7 +315,7 @@ function TeamCell({ logo, teamName }: { logo: string; teamName: string }) {
       <p
         style={{
           marginTop: 4,
-          fontSize: 16,
+          fontSize: 20,
           fontWeight: 800,
           color: GOLD_LIGHT,
           textAlign: 'center',
@@ -322,8 +341,8 @@ function InvitationTemplateComponent({
   sponsorRow3Logos = [...defaultSponsorRow3],
   sponsorRow4Logos = [...defaultSponsorRow4],
   season3LogoUrl = rpclSeason3Logo,
-  deityLeftUrl = chamundaFallback,
-  deityRightUrl = koylaveerFallback,
+  deityLeftUrl = chamundaMaa,
+  deityRightUrl = koylaveerDada,
 }: InvitationTemplateProps) {
   const displayName = name === 'Your Name' ? '' : name
   const formattedName = displayName ? formatPosterName(displayName) : ''
@@ -372,7 +391,11 @@ function InvitationTemplateComponent({
             gap: 4,
           }}
         >
-          <DeityCorner imageUrl={deityLeftUrl} label={deityConfig.left.labelGujarati} />
+          <DeityCorner
+            imageUrl={deityLeftUrl}
+            label={deityConfig.left.labelGujarati}
+            objectPosition="center 12%"
+          />
 
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, minWidth: 0 }}>
           <div
@@ -432,7 +455,12 @@ function InvitationTemplateComponent({
           </p>
           </div>
 
-          <DeityCorner imageUrl={deityRightUrl} label={deityConfig.right.labelGujarati} />
+          <DeityCorner
+            imageUrl={deityRightUrl}
+            label={deityConfig.right.labelGujarati}
+            objectPosition="center 42%"
+            width={DEITY_IMG_RIGHT_W}
+          />
         </div>
 
         {/* Title sponsor — logo with name below */}

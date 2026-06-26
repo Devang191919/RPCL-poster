@@ -25,7 +25,7 @@ export const sponsorRow3: PosterSponsorSlot[] = [
   {
     id: 'trophy',
     label: 'Trophy Sponsor',
-    name: 'Trophy Sponsor Name',
+    name: 'Raval Creation',
     publicPath: '/sponsors/trophy.png',
   },
 ]
