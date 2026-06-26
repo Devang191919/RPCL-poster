@@ -630,11 +630,26 @@ function InvitationTemplateComponent({
             >
               {tournamentConfig.gujaratiMessage}
             </p>
+
+            <p
+              className="text-center"
+              style={{
+                fontFamily: "'Noto Sans Gujarati', sans-serif",
+                fontSize: 28,
+                color: GOLD_LIGHT,
+                fontWeight: 700,
+                lineHeight: 1.35,
+                margin: 0,
+              }}
+            >
+              {tournamentConfig.gujaratiDateLabel} : {tournamentConfig.gujaratiDate}
+            </p>
+
             <p
               className="w-full text-center"
               style={{
                 fontFamily: "'Noto Sans Gujarati', sans-serif",
-                fontSize: 24,
+                fontSize: 28,
                 color: GOLD_LIGHT,
                 fontWeight: 700,
                 lineHeight: 1.35,
