@@ -33,3 +33,5 @@ Configured for [Render](https://render.com) static hosting via `render.yaml`.
 - Sponsors: `src/config/sponsors.ts`
 - Teams: `src/config/teams.ts`
 - Poster layout: `src/components/invitation/InvitationTemplate.tsx`
+- Deity images (top corners): add PNGs to `public/deities/chamunda-maa.png` and `public/deities/koylaveer-dada.png`
+- Deity labels: `src/config/deities.ts`

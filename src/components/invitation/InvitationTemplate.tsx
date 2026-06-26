@@ -1,12 +1,18 @@
-import { memo } from 'react'
+import { memo, type CSSProperties } from 'react'
 import {
   tournamentConfig,
   INVITATION_WIDTH,
   INVITATION_HEIGHT,
 } from '../../config/tournament'
 import { sponsorRow3, sponsorRow4, titleSponsorSlot } from '../../config/sponsors'
+import { deityConfig, POSTER_FRAME_INNER_INSET, POSTER_FRAME_OUTER_INSET } from '../../config/deities'
 import { teamNames } from '../../config/teams'
-import { getPosterNameFontSize } from '../../utils/posterTypography'
+import {
+  formatPosterName,
+  getPosterNameFontFamily,
+  getPosterNameFontSize,
+  getPosterNameLetterSpacing,
+} from '../../utils/posterTypography'
 import {
   defaultTeamLogos,
   defaultMainTitleLogo,
@@ -14,6 +20,8 @@ import {
   defaultSponsorRow4,
   rpclSeason3Logo,
 } from '../../assets'
+import chamundaFallback from '../../assets/deities/chamunda-maa.svg'
+import koylaveerFallback from '../../assets/deities/koylaveer-dada.svg'
 import { CenterCricketDecor } from './CricketDecorations'
 
 type InvitationTemplateProps = {
@@ -25,6 +33,8 @@ type InvitationTemplateProps = {
   sponsorRow3Logos?: string[]
   sponsorRow4Logos?: string[]
   season3LogoUrl?: string
+  deityLeftUrl?: string
+  deityRightUrl?: string
 }
 
 const TEAM_COL_W = 228
@@ -36,6 +46,112 @@ const TEAM_LOGO_IMG = TEAM_LOGO_SIZE - 28
 const GOLD = '#f5c518'
 const GOLD_LIGHT = '#ffe566'
 const GOLD_DARK = '#c9a012'
+const CONTENT_PAD = POSTER_FRAME_INNER_INSET + 5
+const DEITY_IMG = 96
+
+const sponsorLogoWrapStyle: CSSProperties = {
+  background: 'transparent',
+  border: 'none',
+  boxShadow: 'none',
+  padding: 4,
+}
+
+function PosterInnerFrame() {
+  const outer = POSTER_FRAME_OUTER_INSET
+
+  return (
+    <>
+      {/* Outermost edge — thin sharp frame at poster edge */}
+      {/* <div
+        className="pointer-events-none absolute"
+        style={{
+          inset: 4,
+          borderRadius: 4,
+          border: `2px solid ${GOLD_DARK}`,
+          zIndex: 5,
+        }}
+      /> */}
+      {/* Outer border — rectangular gold band */}
+      <div
+        className="pointer-events-none absolute"
+        style={{
+          inset: outer,
+          borderRadius: 8,
+          border: `3px solid ${GOLD}`,
+          boxShadow: `0 0 24px rgba(245,197,24,0.35)`,
+          zIndex: 5,
+        }}
+      />
+      {/* Inner border — rounded, clearly separated from outer */}
+      <div
+        className="pointer-events-none absolute"
+        style={{
+          inset: 30,
+          borderRadius: 22,
+          border: `2px solid ${GOLD_LIGHT}`,
+          boxShadow: `
+            inset 0 0 40px rgba(245,197,24,0.12),
+            0 0 18px rgba(245,197,24,0.22)
+          `,
+          zIndex: 5,
+        }}
+      />
+      {/* Inner fine accent line */}
+      {/* <div
+        className="pointer-events-none absolute"
+        style={{
+          inset: innerFine,
+          borderRadius: 16,
+          border: '1px solid rgba(255,230,160,0.45)',
+          zIndex: 5,
+        }}
+      /> */}
+    </>
+  )
+}
+
+function DeityCorner({ imageUrl, label }: { imageUrl: string; label: string }) {
+  return (
+    <div
+      className="flex shrink-0 flex-col items-center"
+      style={{ width: DEITY_IMG + 16, marginTop: 2 }}
+    >
+      <div
+        className="overflow-hidden rounded-lg"
+        style={{
+          width: DEITY_IMG,
+          height: DEITY_IMG,
+          border: `2px solid ${GOLD}`,
+          boxShadow: `0 0 16px ${GOLD}66, inset 0 0 12px rgba(255,255,255,0.08)`,
+          background: 'linear-gradient(145deg, rgba(255,255,255,0.12), rgba(60,20,100,0.5))',
+        }}
+      >
+        <img
+          src={imageUrl}
+          alt={label}
+          crossOrigin="anonymous"
+          width={DEITY_IMG}
+          height={DEITY_IMG}
+          style={{ width: DEITY_IMG, height: DEITY_IMG, objectFit: 'cover', display: 'block' }}
+        />
+      </div>
+      <p
+        className="text-center"
+        style={{
+          marginTop: 5,
+          fontFamily: "'Noto Sans Gujarati', sans-serif",
+          fontSize: 13,
+          fontWeight: 700,
+          color: GOLD_LIGHT,
+          lineHeight: 1.25,
+          textShadow: '0 1px 4px rgba(0,0,0,0.65)',
+        }}
+      >
+        {label}
+      </p>
+    </div>
+  )
+}
 
 function PosterBackground() {
   return (
@@ -78,8 +194,6 @@ function PosterBackground() {
             'radial-gradient(ellipse at center, transparent 35%, rgba(5,0,20,0.65) 100%)',
         }}
       />
-      <div className="absolute inset-3 rounded-2xl" style={{ border: `3px solid ${GOLD}`, opacity: 0.85 }} />
-      <div className="absolute inset-6 rounded-xl" style={{ border: `1px solid rgba(245,197,24,0.45)` }} />
     </div>
   )
 }
@@ -116,10 +230,7 @@ function SponsorBox({
           height,
           minHeight: height,
           marginTop: 5,
-          background: 'linear-gradient(145deg, rgba(255,255,255,0.97), rgba(255,248,220,0.95))',
-          border: `2px solid ${GOLD}`,
-          padding: 8,
-          boxShadow: '0 4px 16px rgba(0,0,0,0.35)',
+          ...sponsorLogoWrapStyle,
         }}
       >
         <img
@@ -211,8 +322,11 @@ function InvitationTemplateComponent({
   sponsorRow3Logos = [...defaultSponsorRow3],
   sponsorRow4Logos = [...defaultSponsorRow4],
   season3LogoUrl = rpclSeason3Logo,
+  deityLeftUrl = chamundaFallback,
+  deityRightUrl = koylaveerFallback,
 }: InvitationTemplateProps) {
   const displayName = name === 'Your Name' ? '' : name
+  const formattedName = displayName ? formatPosterName(displayName) : ''
   const nameSize = displayName ? getPosterNameFontSize(displayName) : 42
   const leftTeams = teamLogos.slice(0, 4)
   const rightTeams = teamLogos.slice(4, 8)
@@ -231,6 +345,7 @@ function InvitationTemplateComponent({
       }}
     >
       <PosterBackground />
+      <PosterInnerFrame />
 
       <div
         style={{
@@ -240,13 +355,26 @@ function InvitationTemplateComponent({
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
-          padding: '16px',
+          padding: CONTENT_PAD,
           boxSizing: 'border-box',
           gap: 6,
+          overflow: 'hidden',
         }}
       >
-        {/* Header — compact top */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0, gap: 4 }}>
+        {/* Header — deities left/right, titles center */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'space-between',
+            width: '100%',
+            flexShrink: 0,
+            gap: 4,
+          }}
+        >
+          <DeityCorner imageUrl={deityLeftUrl} label={deityConfig.left.labelGujarati} />
+
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, minWidth: 0 }}>
           <div
             className="flex items-center justify-center rounded-full"
             style={{
@@ -259,8 +387,8 @@ function InvitationTemplateComponent({
               src={season3LogoUrl}
               alt="RPCL"
               crossOrigin="anonymous"
-              width={72}
-              height={72}
+              width={68}
+              height={68}
               style={{ borderRadius: '50%', background: '#1a0533', display: 'block' }}
             />
           </div>
@@ -268,11 +396,12 @@ function InvitationTemplateComponent({
           <h1
             style={{
               fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: 52,
+              fontSize: 48,
               color: '#fff',
               letterSpacing: '0.1em',
               lineHeight: 1,
               textShadow: '0 0 20px rgba(168,85,247,0.8), 0 3px 8px rgba(0,0,0,0.6)',
+              textAlign: 'center',
             }}
           >
             {tournamentConfig.titleLine1}
@@ -280,17 +409,18 @@ function InvitationTemplateComponent({
           <p
             style={{
               fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: 28,
+              fontSize: 26,
               color: GOLD_LIGHT,
               letterSpacing: '0.14em',
               lineHeight: 1,
+              textAlign: 'center',
             }}
           >
             {tournamentConfig.titleLine2}
           </p>
           <p
             style={{
-              fontSize: 30,
+              fontSize: 28,
               fontWeight: 800,
               color: GOLD,
               letterSpacing: '0.08em',
@@ -300,6 +430,9 @@ function InvitationTemplateComponent({
           >
             {tournamentConfig.titleSponsorName}
           </p>
+          </div>
+
+          <DeityCorner imageUrl={deityRightUrl} label={deityConfig.right.labelGujarati} />
         </div>
 
         {/* Title sponsor — logo with name below */}
@@ -320,10 +453,7 @@ function InvitationTemplateComponent({
             style={{
               marginTop: 5,
               height: 165,
-              background: 'linear-gradient(145deg, #fff, #fff8e0)',
-              border: `3px solid ${GOLD}`,
-              padding: 10,
-              boxShadow: '0 6px 24px rgba(0,0,0,0.4)',
+              ...sponsorLogoWrapStyle,
             }}
           >
             <img
@@ -469,16 +599,20 @@ function InvitationTemplateComponent({
             </div>
           </div>
 
-          {/* Gujarati — row 2 */}
+          
+
+          {/* Gujarati message + venue — row 2 */}
           <div
             style={{
               gridColumn: 2,
-              gridRow: 2,
+              gridRow: 3,
               display: 'flex',
+              flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
               minHeight: 0,
               padding: '0 4px',
+              gap: 8,
               position: 'relative',
               zIndex: 1,
             }}
@@ -491,9 +625,23 @@ function InvitationTemplateComponent({
                 color: GOLD_LIGHT,
                 fontWeight: 700,
                 lineHeight: 1.35,
+                margin: 0,
               }}
             >
               {tournamentConfig.gujaratiMessage}
+            </p>
+            <p
+              className="w-full text-center"
+              style={{
+                fontFamily: "'Noto Sans Gujarati', sans-serif",
+                fontSize: 24,
+                color: GOLD_LIGHT,
+                fontWeight: 700,
+                lineHeight: 1.35,
+                margin: 0,
+              }}
+            >
+              {tournamentConfig.gujaratiVenueLabel} : {tournamentConfig.gujaratiVenue}
             </p>
           </div>
 
@@ -501,7 +649,7 @@ function InvitationTemplateComponent({
           <div
             style={{
               gridColumn: 2,
-              gridRow: 3,
+              gridRow: 2,
               display: 'flex',
               alignItems: 'center',
               minHeight: 0,
@@ -510,30 +658,47 @@ function InvitationTemplateComponent({
             }}
           >
             <div
-              className="w-full rounded-lg py-3 text-center"
+              className="w-full rounded-lg text-center"
               style={{
                 background: 'rgba(13,2,33,0.75)',
                 border: `2px solid ${GOLD}`,
                 boxShadow: '0 4px 20px rgba(0,0,0,0.35)',
+                padding: '14px 10px',
+                minHeight: 72,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               {displayName ? (
                 <p
                   style={{
-                    fontFamily: "'Bebas Neue', sans-serif",
+                    fontFamily: getPosterNameFontFamily(displayName),
                     fontSize: nameSize,
+                    fontWeight: 700,
                     color: '#fff',
-                    letterSpacing: '0.06em',
-                    lineHeight: 1.05,
-                    textShadow: `0 0 16px ${GOLD}`,
+                    letterSpacing: getPosterNameLetterSpacing(displayName),
+                    lineHeight: 1.2,
+                    textShadow: `0 2px 8px rgba(0,0,0,0.5), 0 0 20px ${GOLD}88`,
                     wordBreak: 'break-word',
-                    padding: '0 6px',
+                    padding: '0 8px',
+                    margin: 0,
                   }}
                 >
-                  {displayName.toUpperCase()}
+                  {formattedName}
                 </p>
               ) : (
-                <p style={{ color: '#e9d5ff', fontSize: 24, fontStyle: 'italic' }}>Enter Your Name</p>
+                <p
+                  style={{
+                    color: '#e9d5ff',
+                    fontSize: 22,
+                    fontStyle: 'italic',
+                    fontFamily: "'Inter', sans-serif",
+                    margin: 0,
+                  }}
+                >
+                  Enter Your Name
+                </p>
               )}
             </div>
           </div>
@@ -572,17 +737,6 @@ function InvitationTemplateComponent({
                 }}
               >
                 {tournamentConfig.date}
-              </p>
-              <p
-                style={{
-                  color: '#fff',
-                  fontSize: 26,
-                  fontFamily: "'Bebas Neue', sans-serif",
-                  marginTop: 6,
-                  lineHeight: 1.1,
-                }}
-              >
-                {tournamentConfig.venue.toUpperCase()}
               </p>
               <p style={{ color: GOLD_LIGHT, fontSize: 22, marginTop: 6, fontWeight: 600 }}>
                 Time : {tournamentConfig.time}

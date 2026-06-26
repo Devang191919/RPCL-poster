@@ -20,7 +20,7 @@ export const DownloadButton = forwardRef<HTMLButtonElement, DownloadButtonProps>
         aria-live="polite"
         whileHover={{ scale: disabled || isDownloading ? 1 : 1.02 }}
         whileTap={{ scale: disabled || isDownloading ? 1 : 0.98 }}
-        className="flex w-full items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#b8941f] px-6 py-4 text-lg font-semibold text-[#0a1628] shadow-lg shadow-[#D4AF37]/20 transition-opacity disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex w-full min-h-[48px] touch-manipulation items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#b8941f] px-4 py-3.5 text-base font-semibold text-[#0a1628] shadow-lg shadow-[#D4AF37]/20 transition-opacity disabled:cursor-not-allowed disabled:opacity-50 sm:gap-3 sm:px-6 sm:py-4 sm:text-lg"
       >
         {isDownloading ? (
           <>

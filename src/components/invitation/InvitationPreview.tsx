@@ -11,6 +11,8 @@ type InvitationPreviewProps = {
   sponsorRow3Logos?: string[]
   sponsorRow4Logos?: string[]
   season3LogoUrl?: string
+  deityLeftUrl?: string
+  deityRightUrl?: string
 }
 
 function InvitationPreviewComponent(props: InvitationPreviewProps) {
@@ -20,21 +22,32 @@ function InvitationPreviewComponent(props: InvitationPreviewProps) {
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
+
     const updateScale = () => {
-      setScale(Math.min(container.clientWidth / INVITATION_WIDTH, 0.42))
+      const width = container.clientWidth
+      if (width <= 0) return
+      // Always fit poster width to container — no cap (fixes small phones)
+      setScale(Math.min(width / INVITATION_WIDTH, 1))
     }
+
     updateScale()
     const observer = new ResizeObserver(updateScale)
     observer.observe(container)
-    return () => observer.disconnect()
+    window.addEventListener('orientationchange', updateScale)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('orientationchange', updateScale)
+    }
   }, [])
 
+  const previewHeight = Math.ceil(INVITATION_HEIGHT * scale)
+
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex w-full min-w-0 flex-col items-center">
       <div
         ref={containerRef}
-        className="relative w-full overflow-hidden rounded-2xl"
-        style={{ height: INVITATION_HEIGHT * scale }}
+        className="relative w-full min-w-0 max-w-full overflow-hidden rounded-xl sm:rounded-2xl"
+        style={{ height: previewHeight }}
       >
         <AnimatePresence mode="wait">
           <motion.div
@@ -54,7 +67,9 @@ function InvitationPreviewComponent(props: InvitationPreviewProps) {
           </motion.div>
         </AnimatePresence>
       </div>
-      <p className="mt-3 text-xs text-white/40">Preview — final download is {POST_FORMAT_LABEL}</p>
+      <p className="mt-2 px-1 text-center text-[11px] text-white/40 sm:mt-3 sm:text-xs">
+        Preview — final download is {POST_FORMAT_LABEL}
+      </p>
     </div>
   )
 }

@@ -7,7 +7,7 @@ export function Footer() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, delay: 0.4 }}
-      className="border-t border-white/10 py-8 text-center"
+      className="border-t border-white/10 px-2 py-6 text-center sm:py-8"
     >
       <p className="text-sm text-white/40">
         Organized by {tournamentConfig.organizer}

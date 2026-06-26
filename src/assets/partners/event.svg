@@ -1,4 +1,3 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60" fill="none">
-  <rect width="120" height="60" rx="8" fill="#1e3a5f" stroke="#D4AF37" stroke-width="1.5"/>
-  <text x="60" y="36" text-anchor="middle" fill="#fff" font-size="22"><ª</text>
+  <text x="60" y="36" text-anchor="middle" fill="#ffe566" font-family="Inter,sans-serif" font-size="11" font-weight="600">EVENT</text>
 </svg>

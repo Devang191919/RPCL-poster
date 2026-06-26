@@ -9,7 +9,7 @@ type GlassCardProps = {
 export function GlassCard({ children, className = '', gold = false }: GlassCardProps) {
   return (
     <div
-      className={`glass-card rounded-2xl p-6 ${gold ? 'glass-card-gold' : ''} ${className}`}
+      className={`glass-card rounded-2xl p-4 sm:p-6 ${gold ? 'glass-card-gold' : ''} ${className}`}
     >
       {children}
     </div>

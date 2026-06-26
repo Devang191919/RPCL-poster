@@ -9,8 +9,9 @@ export const tournamentConfig = {
   time: '7:00 AM to 11:00 PM',
   venue: 'Patel cricket ground, Kanad',
   organizer: 'Raval Parivar',
-  
-  gujaratiMessage: 'હું આવી રહ્યો છું, તમે પણ આવજો RPCL Season 3 માં!',
+  gujaratiVenue: 'પટેલ ક્રિકેટ ગ્રાઉન્ડ, કણાદ ',
+  gujaratiMessage: 'હું જઈ રહ્યો છું, તમે પણ આવો',
+  gujaratiVenueLabel: 'સ્થળ',
   footerLine1: 'Welcome To RPCL Season 3',
   footerLine2: 'See You On The Ground',
 } as const

@@ -124,6 +124,7 @@ export function prepareShellForCapture(shell: HTMLElement): () => void {
   shell.style.overflow = 'hidden'
   shell.style.transform = 'translateX(-200vw)'
   shell.style.visibility = 'visible'
+  shell.style.clipPath = 'none'
 
   return () => {
     if (prev) shell.setAttribute('style', prev)

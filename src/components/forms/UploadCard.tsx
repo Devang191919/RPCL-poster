@@ -39,7 +39,7 @@ export function UploadCard({
 
   return (
     <GlassCard>
-      <h2 className="mb-1 text-lg font-semibold text-white">Profile Photo</h2>
+      <h2 className="mb-1 text-base font-semibold text-white sm:text-lg">Profile Photo</h2>
       <p className="mb-4 text-sm text-white/50">
         JPG, PNG, or WEBP — max 10MB
       </p>
@@ -54,7 +54,7 @@ export function UploadCard({
         whileHover={{ scale: 1.01 }}
         whileTap={{ scale: 0.99 }}
         onClick={() => !photoUrl && inputRef.current?.click()}
-        className={`relative flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed px-6 py-10 transition-colors ${
+        className={`relative flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed px-4 py-8 transition-colors sm:px-6 sm:py-10 ${
           isDragging
             ? 'border-[#D4AF37] bg-[#D4AF37]/10'
             : 'border-white/20 hover:border-[#D4AF37]/50 hover:bg-white/5'

@@ -19,6 +19,9 @@ import {
   sponsorRow3,
   sponsorRow4,
 } from '../config/sponsors'
+import { deityConfig } from '../config/deities'
+import chamundaFallback from './deities/chamunda-maa.svg'
+import koylaveerFallback from './deities/koylaveer-dada.svg'
 
 export { rpclSeason3Logo }
 
@@ -77,28 +80,50 @@ export async function loadSeason3Logo(): Promise<string> {
   return (await tryLoadImage('/rpcl-season3-logo.png')) ?? rpclSeason3Logo
 }
 
+export async function loadDeityImages(): Promise<{ left: string; right: string }> {
+  const [left, right] = await Promise.all([
+    tryLoadImage(deityConfig.left.publicPath),
+    tryLoadImage(deityConfig.right.publicPath),
+  ])
+  return {
+    left: left ?? chamundaFallback,
+    right: right ?? koylaveerFallback,
+  }
+}
+
 export type LoadedPosterAssets = {
   teamLogos: string[]
   mainTitleLogo: string
   sponsorRow3: string[]
   sponsorRow4: string[]
   season3LogoUrl: string
+  deityLeftUrl: string
+  deityRightUrl: string
 }
 
 export async function loadAllPosterAssets(): Promise<LoadedPosterAssets> {
-  const [teamLogos, mainTitleLogo, sponsorRow3Logos, sponsorRow4Logos, season3LogoUrl] =
-    await Promise.all([
-      loadTeamLogos(),
-      loadMainTitleLogo(),
-      loadSponsorRow3(),
-      loadSponsorRow4(),
-      loadSeason3Logo(),
-    ])
+  const [
+    teamLogos,
+    mainTitleLogo,
+    sponsorRow3Logos,
+    sponsorRow4Logos,
+    season3LogoUrl,
+    deities,
+  ] = await Promise.all([
+    loadTeamLogos(),
+    loadMainTitleLogo(),
+    loadSponsorRow3(),
+    loadSponsorRow4(),
+    loadSeason3Logo(),
+    loadDeityImages(),
+  ])
   return {
     teamLogos,
     mainTitleLogo,
     sponsorRow3: sponsorRow3Logos,
     sponsorRow4: sponsorRow4Logos,
     season3LogoUrl,
+    deityLeftUrl: deities.left,
+    deityRightUrl: deities.right,
   }
 }
